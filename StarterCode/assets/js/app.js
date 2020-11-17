@@ -81,12 +81,12 @@ function renderCircles(circlesGroup, newXScale, newYScale, chosenXAxis, chosenYA
 }
 
 // Function used for updating text in circles group with a transition to new text.
-function renderText(circletextGroup, newXScale, newYScale, chosenXAxis, chosenYAxis) {
-    circletextGroup.transition()
+function renderText(circleTextGroup, newXScale, newYScale, chosenXAxis, chosenYAxis) {
+    circleTextGroup.transition()
         .duration(1000)
         .attr("x", d => newXScale(d[chosenXAxis]))
         .attr("y", d => newYScale(d[chosenYAxis]));
-    return circletextGroup;
+    return circleTextGroup;
 }
 
 // Import Data
@@ -134,7 +134,7 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
 
   var circle = elemEnter.append("circle")
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
-    .attr("cy", d => yLinearScale(d.healthcare))
+    .attr("cy", d => yLinearScale(d[chosenYAxis]))
     .attr("r", 13)
     .classed("stateCircle", true)
 
@@ -213,9 +213,6 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
         // updates x axis with transition
         xAxis = renderAxes(xLinearScale, xAxis);
 
-        // updates circles with new x values
-        circlesGroup = renderCircles(circlesGroup, newXScale, newYScale, chosenXAxis, chosenYAxis);
-
         // changes classes to change bold text
         if (chosenXAxis === "poverty") {
           povertyLabel
@@ -269,13 +266,10 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
 
           // functions here found above csv import
           // updates y scale for new data
-          yLinearScale = yScale(overallData, chosenYAxis);
+          yLinearScale = yScale(overallData, chosenYAxis, height);
 
           // updates y axis with transition
           yAxis = renderYAxes(yLinearScale, yAxis);
-
-        // updates circles with new y values
-        circlesGroup = renderCircles(circlesGroup, newXScale, newYScale, chosenXAxis, chosenYAxis);
 
         // changes classes to change bold text
         if (chosenYAxis === "healthcare") {
@@ -321,5 +315,3 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
 }).catch(function(error) {
   console.log(error);
 });
-
-makeResponsive();
