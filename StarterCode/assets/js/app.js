@@ -35,8 +35,7 @@ function xScale(overallData, chosenXAxis) {
   // create scales
   var xLinearScale = d3.scaleLinear()
     .domain([d3.min(overallData, d => d[chosenXAxis]) * 0.8,
-      d3.max(overallData, d => d[chosenXAxis]) * 1.1
-    ])
+      d3.max(overallData, d => d[chosenXAxis]) * 1.1])
     .range([0, width]);
   return xLinearScale;
 }
@@ -52,11 +51,11 @@ function renderAxes(newXScale, xAxis) {
 }
 
 // Function used for updating y-scale var upon click on axis label.
-function yScale(overallData, chosenYAxis, height) {
-    // Create scales.
+function yScale(overallData, chosenYAxis) {
+    // Create scales
     var yLinearScale = d3.scaleLinear()
         .domain([d3.min(overallData, d => d[chosenYAxis]) * .8,
-            d3.max(overallData, d => d[chosenYAxis]) * 1.2])
+            d3.max(overallData, d => d[chosenYAxis]) * 1.1])
         .range([height, 0]);
     return yLinearScale;
 }
