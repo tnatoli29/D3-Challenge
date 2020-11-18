@@ -43,7 +43,8 @@ function xScale(overallData, chosenXAxis) {
 
 // function used for updating xAxis var upon click on axis label
 function renderAxes(newXScale, xAxis) {
-  var bottomAxis = d3.axisBottom(newXScale); xAxis.transition()
+  var bottomAxis = d3.axisBottom(newXScale);
+    xAxis.transition()
     .duration(1000)
     .call(bottomAxis);
 
@@ -63,7 +64,7 @@ function yScale(overallData, chosenYAxis, height) {
 // Function used for updating yAxis var upon click on axis label.
 function renderYAxes(newYScale, yAxis) {
     var leftAxis = d3.axisLeft(newYScale);
-    yAxis.transition()
+        yAxis.transition()
         .duration(1000)
         .call(leftAxis);
     return yAxis;
@@ -89,6 +90,7 @@ function renderText(circleTextGroup, newXScale, newYScale, chosenXAxis, chosenYA
     return circleTextGroup;
 }
 
+
 // Import Data
 d3.csv("./assets/data/data.csv").then(function(overallData){
     console.log(overallData);
@@ -107,9 +109,7 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
   var xLinearScale = xScale(overallData, chosenXAxis);
 
    // Create y scale function
-  var yLinearScale = d3.scaleLinear()
-    .domain([4, d3.max(overallData, d => d.healthcare)])
-    .range([height, 0]);
+  var yLinearScale = yScale(overallData, chosenYAxis, height);
 
   // Create initial axis functions
   var bottomAxis = d3.axisBottom(xLinearScale);
@@ -160,14 +160,14 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
   var ageLabel = xLabelsGroup.append("text")
     .attr("x", 0)
     .attr("y", 30)
-    .attr("value", "age") // value to grab for event listener
+    .attr("value", "age")
     .classed("inactive", true)
     .text("Age (Median)");
 
   var houseLabel = xLabelsGroup.append("text")
     .attr("x", 0)
     .attr("y", 50)
-    .attr("value", "income") // value to grab for event listener
+    .attr("value", "income")
     .classed("inactive", true)
     .text("Household Income (Median)");
 
@@ -196,6 +196,8 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
     .classed("inactive", true)
     .text("Obese (%)");
 
+
+
 // x axis labels event listener
   xLabelsGroup.selectAll("text")
     .on("click", function() {
@@ -208,10 +210,13 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
 
         // functions here found above csv import
         // updates x scale for new data
-        xLinearScale = xScale(overallData, chosenXAxis);
+        xLinearScale = xScale(overallData, chosenXAxis, width);
 
         // updates x axis with transition
         xAxis = renderAxes(xLinearScale, xAxis);
+
+        // updates circles with new x values
+        circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis);
 
         // changes classes to change bold text
         if (chosenXAxis === "poverty") {
@@ -252,7 +257,7 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
   circle = renderCircles(circlesGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
 // Update circles text with new values.
   circleText = renderText(circleText, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
-    });
+   });
 
 // y axis labels event listener
   yLabelsGroup.selectAll("text")
@@ -269,7 +274,10 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
           yLinearScale = yScale(overallData, chosenYAxis, height);
 
           // updates y axis with transition
-          yAxis = renderYAxes(yLinearScale, yAxis);
+          //yAxis = renderYAxes(yLinearScale, yAxis);
+
+          // updates circles with new x values
+          circlesGroup = renderCircles(circlesGroup, yLinearScale, chosenYAxis);
 
         // changes classes to change bold text
         if (chosenYAxis === "healthcare") {
