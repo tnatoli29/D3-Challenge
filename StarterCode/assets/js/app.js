@@ -32,7 +32,6 @@ var chosenYAxis = "healthcare";
 
 // function used for updating x-scale var upon click on axis label
 function xScale(overallData, chosenXAxis) {
-  // create scales
   var xLinearScale = d3.scaleLinear()
     .domain([d3.min(overallData, d => d[chosenXAxis]) * 0.8,
       d3.max(overallData, d => d[chosenXAxis]) * 1.1])
@@ -46,13 +45,11 @@ function renderAxes(newXScale, xAxis) {
     xAxis.transition()
     .duration(1000)
     .call(bottomAxis);
-
   return xAxis;
 }
 
 // Function used for updating y-scale var upon click on axis label.
 function yScale(overallData, chosenYAxis) {
-    // Create scales
     var yLinearScale = d3.scaleLinear()
         .domain([d3.min(overallData, d => d[chosenYAxis]) * .8,
             d3.max(overallData, d => d[chosenYAxis]) * 1.1])
@@ -63,16 +60,15 @@ function yScale(overallData, chosenYAxis) {
 // Function used for updating yAxis var upon click on axis label.
 function renderYAxes(newYScale, yAxis) {
     var leftAxis = d3.axisLeft(newYScale);
-        yAxis.transition()
-        .duration(1000)
-        .call(leftAxis);
+    yAxis.transition()
+       .duration(1000)
+       .call(leftAxis);
     return yAxis;
 }
 
 // function used for updating circles group with a transition to
 // new circles
 function renderCircles(circlesGroup, newXScale, newYScale, chosenXAxis, chosenYAxis) {
-
   circlesGroup.transition()
     .duration(1000)
     .attr("cx", d => newXScale(d[chosenXAxis]))
@@ -123,12 +119,13 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
   // append y axis
   chartGroup.append("g")
     .classed("y-axis", true)
+    //.attr("transform", `translate(0, - ${height})`)
     .call(leftAxis);
 
   // append initial circles
   var circlesGroup = chartGroup.selectAll("circle")
     .data(overallData)
-  // Bind data.
+  // Bind data
   var elemEnter = circlesGroup.enter();
 
   var circle = elemEnter.append("circle")
@@ -145,7 +142,7 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
     .text(d => d.abbr)
     .classed("stateText", true);
 
-  // Create group for two x-axis labels
+  // Create group for x-axis labels
   var xLabelsGroup = chartGroup.append("g")
     .attr("transform", `translate(${width / 2}, ${height + 20})`);
 
@@ -209,13 +206,16 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
 
         // functions here found above csv import
         // updates x scale for new data
-        xLinearScale = xScale(overallData, chosenXAxis, width);
+        xLinearScale = xScale(overallData, chosenXAxis);
 
         // updates x axis with transition
         xAxis = renderAxes(xLinearScale, xAxis);
 
         // updates circles with new x values
         circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis);
+
+        // Update circles text with new values.
+        circleText = renderText(circleText, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
 
         // changes classes to change bold text
         if (chosenXAxis === "poverty") {
@@ -252,10 +252,6 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
             .classed("inactive", false)
         }
       }
-// Update circles with new x values.
-  circle = renderCircles(circlesGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
-// Update circles text with new values.
-  circleText = renderText(circleText, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
    });
 
 // y axis labels event listener
@@ -277,6 +273,9 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
 
           // updates circles with new x values
           circlesGroup = renderCircles(circlesGroup, yLinearScale, chosenYAxis);
+
+          // Update circles text with new values.
+          circleText = renderText(circleText, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
 
         // changes classes to change bold text
         if (chosenYAxis === "healthcare") {
@@ -313,10 +312,6 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
             .classed("inactive", false)
         }
        }
-// Update circles with new y values.
-  circle = renderCircles(circlesGroup, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
-// Update circles text with new values.
-  circleText = renderText(circleText, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
     });
 
 }).catch(function(error) {
