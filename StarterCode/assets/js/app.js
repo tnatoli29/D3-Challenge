@@ -117,9 +117,9 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
     .call(bottomAxis);
 
   // append y axis
-  chartGroup.append("g")
+ var yAxis = chartGroup.append("g")
     .classed("y-axis", true)
-    //.attr("transform", `translate(0, - ${height})`)
+    .attr("transform", `translate(0, - ${height})`)
     .call(leftAxis);
 
   // append initial circles
@@ -258,7 +258,7 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
   yLabelsGroup.selectAll("text")
     .on("click", function() {
       // get value of selection
-        var value = d3.select(this).attr("value");
+      value = d3.select(this).attr("value");
         if (value !== chosenYAxis) {
 
           // replaces chosenYAxis with value
@@ -269,7 +269,7 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
           yLinearScale = yScale(overallData, chosenYAxis, height);
 
           // updates y axis with transition
-          //yAxis = renderYAxes(yLinearScale, yAxis);
+          yAxis = renderYAxes(yLinearScale, yAxis);
 
           // updates circles with new x values
           circlesGroup = renderCircles(circlesGroup, yLinearScale, chosenYAxis);
