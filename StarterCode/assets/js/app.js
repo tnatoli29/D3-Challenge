@@ -119,7 +119,7 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
   // append y axis
  var yAxis = chartGroup.append("g")
     .classed("y-axis", true)
-    .attr("transform", `translate(0, - ${height})`)
+    //.attr("transform", `translate(0, - ${height})`)
     .call(leftAxis);
 
   // append initial circles
@@ -199,7 +199,7 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
     .on("click", function() {
       // get value of selection
       var value = d3.select(this).attr("value");
-      if (value !== chosenXAxis) {
+
 
         // replaces chosenXAxis with value
         chosenXAxis = value;
@@ -210,12 +210,6 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
 
         // updates x axis with transition
         xAxis = renderAxes(xLinearScale, xAxis);
-
-        // updates circles with new x values
-        circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis);
-
-        // Update circles text with new values.
-        circleText = renderText(circleText, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
 
         // changes classes to change bold text
         if (chosenXAxis === "poverty") {
@@ -251,7 +245,11 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
             .classed("active", true)
             .classed("inactive", false)
         }
-      }
+      // updates circles with new x values
+      circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis);
+
+      // Update circles text with new values.
+      circleText = renderText(circleText, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
    });
 
 // y axis labels event listener
@@ -259,7 +257,6 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
     .on("click", function() {
       // get value of selection
       value = d3.select(this).attr("value");
-        if (value !== chosenYAxis) {
 
           // replaces chosenYAxis with value
           chosenYAxis = value;
@@ -270,12 +267,6 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
 
           // updates y axis with transition
           yAxis = renderYAxes(yLinearScale, yAxis);
-
-          // updates circles with new x values
-          circlesGroup = renderCircles(circlesGroup, yLinearScale, chosenYAxis);
-
-          // Update circles text with new values.
-          circleText = renderText(circleText, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
 
         // changes classes to change bold text
         if (chosenYAxis === "healthcare") {
@@ -311,7 +302,11 @@ d3.csv("./assets/data/data.csv").then(function(overallData){
             .classed("active", true)
             .classed("inactive", false)
         }
-       }
+      // updates circles with new x values
+      circlesGroup = renderCircles(circlesGroup, yLinearScale, chosenYAxis);
+
+      // Update circles text with new values.
+      circleText = renderText(circleText, xLinearScale, yLinearScale, chosenXAxis, chosenYAxis);
     });
 
 }).catch(function(error) {
