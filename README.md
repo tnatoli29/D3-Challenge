@@ -1,5 +1,5 @@
 # D3-Challenge
-CLick here to see Webpage:
+Click here to see Webpage:
 [https://tnatoli29.github.io/D3-Challenge/](https://tnatoli29.github.io/D3-Challenge/)
 
 
